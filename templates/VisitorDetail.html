@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="static/js/webcam.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <title>Visitor Details</title>
+</head>
+<style>
+
+    html, body
+        {
+            height: 1920px;
+            width: 1080px;
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+    .container {
+        width: 1080px;
+        height: 1920px;
+    }
+    .row {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-top: 200px;
+        height: 1920px;
+    }
+
+    .well {
+    min-height: 20px;
+    padding: 19px;
+    height: 1400px;
+    margin-bottom: 20px;
+    background-color: rgba(0,0,0,0.0);
+    border: 0px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+    }
+
+    h1, .h1 {
+    font-size: 100px;
+    }
+
+    .img-circle {
+        border-radius: 50%;
+        height: 600px;
+        width: 600px;
+        border: 5px solid black;
+    }
+
+    .btn-block {
+        display: block;
+        width: 40%;
+        height: 80px;
+        border-radius:10px;
+        font-size: 40px;
+    }
+
+</style>
+
+
+<body>
+<div class="container">
+  <div class="row">
+<br>
+<br>
+    <div class="span3 well">
+      <center>
+      <div href="#aboutModal" data-toggle="modal">
+       <img id="imageBox" src="" name="aboutme" width="800" height="800" class="img-circle">
+       <!-- <img id="imageBox2" src="" name="aboutme" width="800" height="800" class="img-circle"> -->
+      {% for results in result %}
+      </div>
+       <div style="height: 200px;font-size: 80px;padding-top: 50px;color:#337ab7;">CHECK YOUR DETAILS</div>
+       <div style="height: 80px;font-size: 40px;color: #337ab7d1;">{{results[1]}}</div>
+       <div style="height: 80px;font-size: 40px;color: #337ab7d1;">{{results[2]}}</div>
+       <div style="height: 80px;font-size: 40px;color: #337ab7d1;">{{results[3]}}</div>
+       <div style="height: 120px;font-size: 40px;color: #337ab7d1;">{{results[4]}}</div>
+       <div><button class="btn btn-primary btn-block" type="submit" onclick="myFunction()">I Agree</button></div>
+   
+    </center>
+</div>
+</div>
+</div>
+<body>
+
+<script type="text/javascript">
+    
+    // var myVar = setTimeout(myFunction, 5000);
+    var name = "{{ results[1] }}"
+    // var name2 = "{{ result2 }}"
+    document.getElementById('imageBox').src = "../static/train/"+ name + ".jpeg";
+    // document.getElementById("imageBox2").src = "../static/image/"+name2+".jpeg";
+    function myFunction() {
+        // clearInterval(myVar);
+        window.location.href="/meet"; 
+        return
+    }
+</script>
+    {% endfor %}
+</html>

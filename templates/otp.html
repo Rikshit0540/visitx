@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="static/js/webcam.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <title>Welcome</title>
+</head>
+<style>
+     html, body
+        {
+            height: 1920px;
+            width: 1080px;
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        
+        div table {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+        }
+
+        .col-centered{
+            margin: 0 auto;
+            float: none;
+        }
+
+        #enter {
+            padding-top: 75%;
+            text-align: center;
+            font-size: 80px;
+        }
+
+        .form-control{
+            font-size: 45px;
+            height: 60px;
+            text-align: center;
+        }
+
+        #submitOtp{
+            /* padding-top: 20%; */
+            text-align: center;
+            font-size: 60px;
+            height: 100px;
+            width: 60%;
+            margin: 50px;
+        }
+        input[type=number]{
+            width: 70%;
+            height: 10%;
+        }
+</style>
+<body><form method="POST" action="">
+    <div style="background-size: 100% 100%;position:relative;height: 100%;width:100%;">
+                <div id="enter" align="center" valign="middle">Please Enter the OTP</div>
+                <div align="center" valign="middle" style="padding-top: 80px;">
+                <input class="form-control" type="number" name="otp" value="{{ request.form.otp }}" id="otp" placeholder="Enter OTP">
+                </div>
+                <div style="text-align: center;"><button align="center" valign="middle" id="submitOtp" type="submit" class="btn btn-primary btn-lg">Submit</button></div>
+            </div></form>
+            {% if error %}
+            <p><strong>RESULT:</strong>{{ error }}</p>
+            {% endif %}
+</body>
+
+
+
+<script type="text/javascript">
+
+  function myfunction(){
+    var otp = $('#otp').val();
+    if (otp == "") {
+      alert('Please Enter your otp');
+      return
+    }
+    var otp={
+      'otp': otp
+    };
+    $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/otpVarification",
+            data: otp,
+            success: function (data) {
+                alert(data.status);
+                if (data.status == '1') {
+                  return window.location.href="/conformation";
+                }else{
+                  return alert("Wrong OTP");
+                }
+            },
+            error: function (error) {
+                jsonValue = jQuery.parseJSON(error.responseText);
+                alert("error" + error.responseText);
+            }
+        });
+}
+
+</script>
+
+
+</html>

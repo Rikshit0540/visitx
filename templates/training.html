@@ -1,0 +1,143 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<title>Visito</title>
+</head>
+<body>
+	<div id="results"></div>
+	<h1>Training Module</h1>
+	<div id="my_camera" style="width: 400px;height: 400px;border-radius: 50%;"></div>
+	<!-- First, include the Webcam.js JavaScript Library -->
+	<script type="text/javascript" src="static/js/webcam.min.js"></script>
+	
+	<!-- Configure a few settings and attach camera -->
+	<script language="JavaScript">
+		Webcam.set({
+			width: 400,
+			height: 400,
+			image_format: 'jpeg',
+			jpeg_quality: 90,
+			flip_horiz: true,
+			constraints: {
+				width: { exact: 400 },
+				height: { exact: 400 }
+			}
+		});
+		Webcam.attach( '#my_camera' );
+	</script>
+	
+	<form>
+		<div id="take_snap">
+				<input type=button value="Take Snapshot" onClick="take_snapshot()" style="font-size: 30px;">
+		</div>
+		<div id="reset_cam" style="display:none">
+				<input type=button value="&lt; Reset" onClick="reset_cam()" style="font-size:30px;">
+				<input type=button value="Apply &gt;" onClick="save_photo()" style="font-weight:bold; font-size: 30px;">
+		</div>
+	</form>
+	<div style="font-size: 30px;">
+		Name:<br>
+		<input id="txt_firtname" type="text" name="" style="font-size:30px;"><br>
+		EmailID:<br>
+		<input id="txt_emailID" type="text" name="" style="font-size:30px;"><br>
+		MobileNo:<br>
+		<input id="txt_mobileNo" type="text" name="" style="font-size:30px;"><br>
+		company:<br>
+		<input id="txt_company" type="text" name="" style="font-size: 30px;"><br>
+		ID Proof:<br>
+		<input id="txt_photoProof" type="text" name="" style="font-size:30px;"><br>
+		<br><br>
+	</div>
+
+	<script language="JavaScript">
+		function take_snapshot() {
+			Webcam.freeze();
+			document.getElementById('take_snap').style.display = 'none';
+			document.getElementById('reset_cam').style.display = '';
+		}
+		function reset_cam(){
+			Webcam.unfreeze();
+			document.getElementById('take_snap').style.display = '';
+			document.getElementById('reset_cam').style.display = 'none';
+		}
+		function save_photo(){
+			Webcam.snap( function(data_uri) {
+				var name = $('#txt_firtname').val();
+				var emailID = $('#txt_emailID').val();
+				var mobileNo = $('#txt_mobileNo').val();
+				var company = $('#txt_company').val();
+				var Proof = $('#txt_photoProof').val();
+
+				console.log('asdasdasdsadasdsadsadsad',name);
+				if ((name == "")||(emailID == "")||(mobileNo == "")||(company == "")){
+					alert('Please Enter Your Name');
+					return;
+				}
+				document.getElementById('take_snap').style.display = '';
+				document.getElementById('reset_cam').style.display = 'none';
+				document.getElementById('results').innerHTML = 
+					'<h2>Here is your image:</h2>' + 
+					'<img src="'+data_uri+'"/>';
+				var email={
+					'image': data_uri,
+					'name':name,
+					'emailID':emailID,
+					'company':company,
+					'mobileNo':mobileNo,
+					'IDproof':Proof
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/trainingData",
+                data: email,
+                success: function (data) {
+                    alert(data.matchData);
+					console.log(data);
+					console.log('webservicedata',data.matchData);
+					webservice(data_uri);
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+			});
+		}
+
+		function webservice(data_uri){
+			var parameter={
+				'image': data_uri
+			};
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "/trainData",
+				data: parameter,
+				success: function (data) {
+					alert(data.matchData);
+					console.log(data);
+					console.log(data.matchData);
+					console.log("nhjds")
+					if(data.matchData == "Unknown"){
+						return
+					}
+					else{
+						window.location.href="/otp1";
+						return
+					}
+					console.log('hhhjhjjjhjhjh',data.matchData);
+				},
+				error: function (error) {
+					jsonValue = jQuery.parseJSON(error.responseText);
+					alert("error" +  error.responseText);
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

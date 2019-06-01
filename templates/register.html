@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+   
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="static/js/webcam.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <title>Register</title>
+</head>
+<style>
+
+    html, body
+        {
+            height: 1920px;
+            width: 1080px;
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+    .container {
+        width: 1080px;
+        height: 1920px;
+    }
+    .row {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-top: 200px;
+        height: 1920px;
+    }
+
+    .well {
+    min-height: 20px;
+    padding: 19px;
+    height: 1400px;
+    margin-bottom: 20px;
+    background-color: rgba(0,0,0,0.0);
+    border: 0px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+    }
+
+    h1, .h1 {
+    font-size: 100px;
+    }
+
+    .img-circle {
+        border-radius: 50%;
+        height: 500px;
+        width: 500px;
+    }
+
+    /* .btn-block {
+        display: block;
+        width: 40%;
+        height: 60px;
+        border-radius:10px;
+        font-size: 40px;
+
+    } */
+    input[type=text]{
+            border:2px solid #ccc;
+            border-radius: 20px;
+            text-align: center;
+        }
+    input[type=number]{
+        border:2px solid #ccc;
+        border-radius: 20px;
+        text-align: center;
+    }
+    input[type=email]{
+        border:2px solid #ccc;
+        border-radius: 20px;
+        text-align: center;
+    }
+ 
+  ::placeholder{
+      text-align: center;
+        color:  #ccc;
+    }
+    #submitOtp{
+            /* padding-top: 20%; */
+            text-align: center;
+            font-size: 60px;
+            height: 100px;
+            width: 40%;
+            margin: 50px;
+            border-radius: 20px;
+        }
+
+</style>
+<body>
+<div class="container">
+  <div class="row">
+<br>
+<br>
+    <div class="span3 well">
+      <center>
+      <div href="#aboutModal" data-toggle="modal">
+       <img id="imageBox" src="" name="aboutme" width="800" height="800" class="img-circle">
+      </div>
+       <div style="height: 0px;font-size: 60px;padding-top:0px; color:black;">Awesome</div>
+       <div style="height: 300px;font-size: 60px;padding-top: 200px; color: rgb(23, 126, 243);">A few more details please</div>
+       <div style="height: 90px;font-size: 50px;box-sizing: border-box;"><input type="text" id="name" value="" placeholder="Full Name"></div>
+       <div style="height: 90px;font-size: 50px;box-sizing: border-box;"><input type="text" id="company" vaue="" placeholder="Company name"></div>
+       <div style="height: 90px;font-size: 50px;box-sizing: border-box;"><input type="number" id="number" value="" placeholder="Number"></div>
+       <div style="height: 120px;font-size: 50px;box-sizing: border-box;"><input type="email" id="email" value="" placeholder="Email">  </div>
+       <div style="text-align: center;"><button align="center" valign="middle" id="submitOtp" type="button" class="btn btn-primary btn-lg" onclick="myfunction()">Submit</button></div>
+    </div>
+    </center>
+</div>
+</div> 
+<body>
+
+<script type="text/javascript">
+
+        var nameasd = "{{result}}"  
+        document.getElementById("imageBox").src = "../static/image/"+nameasd+".jpeg";
+        
+    	function myfunction(){
+                
+                var image = "data:image/jpeg;base64,{{resultimage}}";
+                console.log('imagename', image);
+				var name = $('#name').val();
+				var emailID = $('#email').val();
+				var mobileNo = $('#number').val();
+				var company = $('#company').val();
+				console.log('asdasdasdsadasdsadsadsad',name);
+				if ((name == "")||(emailID == "")||(mobileNo == "")||(company == "")){
+					alert('Please Enter Your Name');
+					return;
+				}
+				var email={
+					'image': image,
+					'name':name,
+					'emailID':emailID,
+					'company':company,
+					'mobileNo':mobileNo,
+					'IDproof':""
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/trainingData",
+                data: email,
+                success: function (data) {
+                    console.log('training data');
+                    console.log(data.matchData);
+                    webservice(image);
+                    
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+        }
+
+
+            function webservice(image){
+				var parameter={
+					'image':  image
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/trainData",
+                data: parameter,
+                success: function (data) {
+                    alert(data.matchData);
+                    console.log(data);
+					console.log(data.matchData);
+                    if (data.matchData == "Unknown"){
+                        return
+                    }else{
+                        window.location.href="/otp1";
+                        return 
+                    }
+					console.log('asdasdsadsadasd',data.matchData);
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+		}
+
+
+</script>
+
+</html>

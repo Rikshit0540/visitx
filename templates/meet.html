@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script type="text/javascript" src="static/js/webcam.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+        <script src="static/js/jquery.easy-autocomplete.min.js"></script> 
+        <link rel="stylesheet" href="static/css/easy-autocomplete.min.css"> 
+        <link rel="stylesheet" href="static/css/easy-autocomplete.themes.min.css"> 
+        <title>Welcome</title>
+    </head>
+<style>
+     html, body
+        {
+            height: 1920px;
+            width: 1080px;
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .fontSizeHeader {
+            padding-top: 400px;
+            font-size: 100px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .normalSizeFont{
+            padding-top: 0px;
+            font-size: 75px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        div table {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+        }
+    video {
+     border-radius: 50%;
+    }
+
+    #input_box {
+        margin: 0 auto;
+        text-align: center;
+        height: 60px;
+    }
+    
+    #input_box2 {
+        margin: 0 auto;
+        text-align: center;
+        height: 80px;
+    }
+
+
+   #div {
+        z-index: 2;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        padding-top: 20px;
+        /* font-size: 50px; */
+    }
+
+    .easy-autocomplete-container ul li, .easy-autocomplete-container ul .eac-category{
+        font-size: 50px;
+    }
+
+    .form-control{
+        font-size: 50px;
+    }
+    .btn-block{
+        display: unset;
+        width: 40%;
+        height: 80px;
+        border-radius: 10px;
+        font-size: 40px;
+    }
+
+</style>
+<body>
+    <div style="background-size: 100% 100%;position:relative;height: 100%;width:100%;">
+        <table width="600px" height="600px" style="height: 1080px;width:1080px;background: url('static/images/circle-bg.png');background-size: 100% 100%; opacity: 1">
+        </table>
+        <table border="0" width="600px" height="100%" collspacing="0" cellspacing="0" >
+            <div class="fontSizeHeader" align="center">Welcome back</div>
+            <div class="normalSizeFont" align="center">{{result}}</div>
+            <tr>
+                <td align="center" valign="middle">
+                    <img id="logo" src="static/train/{{result}}.jpeg" style="width: 600px; height: 600px; margin-top: 50px;border-radius: 50%;">
+                </td>
+            </tr>
+            <div style="padding-top: 650px;font-size: 60px;" align="center">Whom do you want to meet?</div>
+                <div id="div" class="form-group">
+                    <div id="div" class="col-md-8">
+                    <input type="email" class="form-control" id="input_box" placeholder="Start typing here">
+                    <input type="email" class="form-control" id="input_box2" placeholder="Purpose" style="padding: 30px">
+                    <div style="padding:50px;"><button class="btn btn-primary btn-block" type="submit" onclick="cheethhi()">I Agree</button></div>
+                    </div>  
+                </div>
+        </table>
+    </div>
+</body>
+
+<script type=text/javascript>
+    var value = "";
+    var name = "";
+    var employeeData = {{ json_list|tojson|safe }};
+    var parsedData = JSON.parse(employeeData);
+    console.log("enokasdasd", parsedData[0].employeeName);
+    console.log("employeeid",parsedData[1].id);
+    var options = {
+	    data: parsedData,
+	    getValue: "employeeName",
+        list: {
+            showAnimation: {
+			type: "fade", //normal|slide|fade
+			time: 400,
+			callback: function() {}
+		    },
+
+		    hideAnimation: {
+			type: "slide", //normal|slide|fade
+			time: 400,
+			callback: function() {}
+		    },
+            onSelectItemEvent: function() {
+                value = $("#input_box").getSelectedItemData().id;
+                name = $("#input_box").getSelectedItemData().employeeName;
+                console.log("employeeID",value); 
+                console.log('asdfsdaf',name);
+            }
+        }
+    };
+
+$("#input_box").easyAutocomplete(options);
+    
+    var value2 = "";
+    var name2 = "";
+    var purposeData = {{ json_list2|tojson|safe }};
+    var parsedData = JSON.parse(purposeData);
+    console.log("enokasdasd", parsedData[0].Purpose);
+    var options = {
+	    data: parsedData,
+	    getValue: "purpose",
+        list: {
+            showAnimation: {
+			type: "fade", //normal|slide|fade
+			time: 400,
+			callback: function() {}
+		    },
+
+		    hideAnimation: {
+			type: "slide", //normal|slide|fade
+			time: 400,
+			callback: function() {}
+		    },
+            onSelectItemEvent: function() {
+                value2 = $("#input_box2").getSelectedItemData().purpose;
+                name2 = $("#input_box2").getSelectedItemData().purpose;
+                console.log("purpose",value2); 
+                console.log('asdfsdaf',name2);
+            }
+        }
+    };
+
+$("#input_box2").easyAutocomplete(options);
+    
+    function cheethhi(){
+        console.log('asdfsdaf',name);
+				var parameter={
+					'name': name,
+                    'id' :value,
+                    'name2':name2,
+                    'userID' : '{{result[0].id}}'
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/cheethhi",
+                data: parameter,
+                success: function (data) {
+                    // alert(data.matchData);
+					console.log(data.matchData);
+					console.log('asdasdsadsadasd',data.matchData);
+                    window.location.href="/conformation?name="+name;
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+		
+		}   
+
+        function webservice(){
+            var parameter={
+                'name': name
+            };
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/conformation",
+                data: parameter,
+                success: function(data) {
+                    console.log(data);
+                    console.log(data.matchData);
+                    window.location.href="/conformation?name="+name;
+                    return name;
+                },
+            error: function(error) {
+                jsonValue = jQuery.parseJSON(error.responseText);
+                alert("error" + error.responseText);
+            }
+            });
+        }
+
+</script>
+</html>

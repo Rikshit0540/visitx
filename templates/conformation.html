@@ -1,0 +1,85 @@
+<!DOCTYPE>
+<html lang="en">
+    <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <meta charset="utf-8">
+            <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+        <style>
+            html, body
+            {
+            height: 1920px;
+            width: 1080px;
+
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+            div table {
+            position: relative;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            
+        }
+        
+        
+        
+        .button {
+        background: #337ab7;    
+        border: none;
+        color: white;
+        padding: 15px;
+        /* text-align: center; */
+        text-decoration: none;
+        display: inline-block;
+        font-size: 60px;
+        margin: -60px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+        position: relative;
+        align-content: center;
+        top:435px;
+    }
+        
+        </style>
+           
+    </head>
+    <body>
+   
+        <table width="100%" border="0" height="100%">
+            <tr>
+                <td align="center" valign="middle">
+        
+        <div>    
+        <table border="0">
+    <tr>
+        <div><h1 style="align-content: center;font-size: 80px;position: relative;bottom: 295px;">Just have a seat</h1></div>
+        <div><h1 style="align-content: center;font-size: 80px;position: relative;bottom: 30px;color: #337ab7;">{{name}}</h1></div>
+        <div><h1 style="align-content: center;font-size: 50px;position: relative;top: -30px;width:700px;color: #337ab7;">has been informed and</h1></div>
+        <div><h1 style="align-content: center;font-size: 50px;position: relative;top: -30px;width:700px;color: #337ab7;">and will be joining you shortly</h1></div>
+        <div><h1 style="position:relative;align-content: center;font-size: 90px;bottom: 540px;">{{result}}</h1></div>
+        <div><h1 style="position:relative;align-content: center;font-size: 50px;top: 360px;color: #337ab7;">Do you want to know more about us?</h4></div>
+        <div><button class="button" onclick="myfunction()">tell me more</button></div>
+    </tr>
+</table> 
+</body>
+
+<script type=text/javascript>
+    function myfunction() {
+        window.location.href="/";
+    }
+
+
+</script>
+
+
+
+</html>

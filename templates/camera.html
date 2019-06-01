@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="static/js/webcam.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <title>Welcome</title>
+</head>
+<style>
+     html, body
+        {
+            height: 1920px;
+            width: 1080px;
+            margin:0;
+            padding:0;
+            background: url("static/images/bg2.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        
+        div table {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+        }
+
+        .out {
+            position:relative;
+            height: 100%;
+            width:100%;
+        }
+
+        .in{
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+        }
+    video {
+     border-radius: 50%;
+    }
+
+</style>
+<body>
+        <!-- <div align="center" style="height: 500px; width: 500px; background: red; border: 5px solid #000; border-radius: 50%; position: absolute; top: -300px; left: 27%">
+            
+            </div> -->
+    <div style="background-size: 100% 100%;position:relative;height: 100%;width:100%;">
+            <div align="center" style="height: 500px; width: 500px; background:#337ab7; border: 1px solid #000; border-radius: 50%; position: absolute; top: -300px; left: 27%">
+                    
+                </div>
+        <table  width="600px" height="600px" style="height: 1080px;width:1080px;background: url('static/images/circle-bg.png');background-size: 100% 100%; opacity: 1">
+        </table>
+        <table border="1" width="600px" height="100%" collspacing="0" cellspacing="0" >
+                
+            <tr>
+                <td  height="100px" align="center">
+                    <div id="countdowntimer" style="font-size: 100px;margin-top: 10px;">SMILE</div>
+                </td>
+            </tr>   
+            <tr>
+                <td align="center" valign="middle">
+                    <img id="logo" src="static/images/counter2.gif" style="width: 600px; height: 600px; margin-top: 50px">
+                    <div id="profile" align="center" style="display:none;border-radius: 50%;"></div>
+                </td>
+            </tr>  
+            <div><button id="upload_pic" class="btn btn-primary" input type="file" style="position: absolute; bottom: 200px; left: 450px;font-size: 30px;">upload_pic</button>     
+            </div>     
+            <tr>
+                <td height="50px" align="center">
+                <button id="take_snap" class="btn btn-primary" type="button" style="position: relative; bottom: 20px;font-size: 30px;" onClick="take_snapshot()">Take Snapshot</button>
+                <button id="reset_cam" class="btn btn-primary" type="button" style="width: 40%;position: relative; bottom: 20px;display:none;font-size: 30px;" onClick="reset_cam()">Reset</button>
+                <button id="save_cam" class="btn btn-primary" type="button" style="width: 40%;margin-left: 50px;position: relative; bottom: 20px;display:none;font-size: 30px;" onClick="save_photo()">Apply</button>
+                <a style=" text-decoration: none;"><p style="margin-bottom: 40px;width: 100%; font-size: 30px; font-family: Arial, Helvetica, sans-serif; color:#337ab7;">
+                        Please stand in front of the camera
+                    </p></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<!-- <script language="JavaScript">
+    var myVar = setInterval(camOpen, 3000);
+    
+    function countdowntimer(){
+            var timeleft = 4;
+            var downloadTimer = setInterval(function(){
+            timeleft--;
+            document.getElementById("countdowntimer").textContent = timeleft;
+            if (timeleft == 0)
+                take_snapshot();
+                console.log('Interval');
+            if(timeleft <= 0)
+                clearInterval(downloadTimer);
+                console.log('clearInterval');
+            },1000);
+            
+    }
+
+    function camOpen(){
+        clearInterval(myVar);
+        // countdowntimer();
+        Webcam.set({
+            width: 600,
+            height: 600,
+            image_format: 'jpeg',
+            jpeg_quality: 90,
+            flip_horiz: true,
+            constraints: {
+                width: { exact: 300 },
+                height: { exact: 300 }
+            }
+        });
+        document.getElementById('logo').style.display = 'none';
+		document.getElementById('profile').style.display = '';
+        Webcam.attach('#profile');
+    }
+
+    function myStopFunction() {
+        clearInterval(myVar);
+    }
+
+    function save_photo(){
+			Webcam.snap( function(data_uri) {
+				document.getElementById('take_snap').style.display = '';
+				document.getElementById('reset_cam').style.display = 'none';
+                document.getElementById('save_cam').style.display = 'none';
+				var parameter={
+					'image': data_uri
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/trainData",
+                data: parameter,
+                success: function (data) {
+                    if(data.matchData == "Unknown"){
+                        window.location.href="/training";
+                        return
+                    }else if (data.matchData == "it can only have one"){
+                        alert('Please try again! ');
+                        // countdowntimer();
+                        return
+                    }else{
+                        window.location.href="/VisitorDetail";
+                        return
+                    }
+					console.log('asdasdsadsadasd',data.matchData);
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+			});
+		}   
+    
+    // function moveNextPage(id){
+    //     var parameter={
+	// 				"id": "1"
+	// 			};
+	// 			$.ajax({
+    //             type: "POST",
+    //             dataType: "json",
+    //             url: "/VisitorDetail",
+    //             data: parameter,
+    //             success: function (data) {
+    //                 // alert(data.matchData);
+	// 				console.log(data.matchData);
+	// 				// $('#txt_lastname').html(data.data[0].name);
+	// 				// $('#txt_MobileNo').html(data.data[0].mobileNo);
+	// 				// $('#txt_EmailID').html(data.data[0].emailID);
+	// 				// $('#txt_idProof').html(data.data[0].photo_proof);
+	// 				// $('#txt_companyName').html(data.data[0].company);
+	// 				console.log('asdasdsadsadasd',data.matchData);
+    //             },
+    //             error: function (error) {
+    //                 jsonValue = jQuery.parseJSON(error.responseText);
+    //                 alert("error" + error.responseText);
+    //             }
+    //         });
+    // }
+
+    function take_snapshot() {
+		Webcam.freeze();
+		document.getElementById('take_snap').style.display = 'none';
+		document.getElementById('reset_cam').style.display = '';
+        document.getElementById('save_cam').style.display = '';
+        save_photo();
+	}
+
+
+    function reset_cam(){
+		Webcam.unfreeze();
+		document.getElementById('take_snap').style.display = '';
+		document.getElementById('reset_cam').style.display = 'none';
+        document.getElementById('save_cam').style.display = 'none';
+	}
+</script> -->
+
+<script language="JavaScript">
+    var myVar = setInterval(camOpen, 3000);
+    function camOpen(){
+        clearInterval(myVar);
+        Webcam.set({
+            width: 400,
+            height: 400,
+            image_format: 'jpeg',
+            jpeg_quality: 90,
+            flip_horiz: true,
+            constraints: {
+                width: { exact: 400 },
+                height: { exact: 400 }
+            }
+        });
+        document.getElementById('logo').style.display = 'none';
+		document.getElementById('profile').style.display = '';
+        Webcam.attach('#profile');
+    }
+
+    function myStopFunction() {
+        clearInterval(myVar);
+    }
+
+    function save_photo(){
+			Webcam.snap( function(data_uri) {
+				document.getElementById('take_snap').style.display = '';
+				document.getElementById('reset_cam').style.display = 'none';
+                document.getElementById('save_cam').style.display = 'none';
+				var parameter={
+					'image': data_uri
+				};
+				$.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/trainData",
+                data: parameter,
+                success: function (data) {
+                    alert(data.matchData);
+					console.log(data.matchData);
+                    moveNextPage(data.id)
+					// $('#txt_lastname').html(data.data[0].name);
+					// $('#txt_MobileNo').html(data.data[0].mobileNo);
+					// $('#txt_EmailID').html(data.data[0].emailID);
+					// $('#txt_idProof').html(data.data[0].photo_proof);
+					// $('#txt_companyName').html(data.data[0].company);
+                    if(data.matchData == "Unknown"){
+                        window.location.href="/register";
+                        return 
+                    }else if (data.matchData == "it can only have one"){
+                        alert('Please try again! ');
+                        // countdowntimer();
+                        window.location.href="/camera";
+                        return
+                    }
+					console.log('train',data.matchData);
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("error" + error.responseText);
+                }
+            });
+			});
+		}
+                
+    
+    function moveNextPage(id){
+        var parameter={
+					"id": "1"
+				};
+			// 	$.ajax({
+            //     type: "POST",
+            //     dataType: "json",
+            //     url: "/VisitorDetail",
+            //     data: parameter,
+            //     success: function (data) {
+            //         alert(data.matchData);
+			// 		console.log(data.matchData);
+			// 		$('#txt_lastname').html(data.data[0].name);
+			// 		$('#txt_MobileNo').html(data.data[0].mobileNo);
+			// 		$('#txt_EmailID').html(data.data[0].emailID);
+			// 		$('#txt_idProof').html(data.data[0].photo_proof);
+			// 		$('#txt_companyName').html(data.data[0].company);
+			// 		console.log('don',data.matchData);
+            //     },
+            //     error: function (error) {
+            //         jsonValue = jQuery.parseJSON(error.responseText);
+            //         alert("error" + error.responseText);
+            //     }
+            // });
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/VisitorDetail",
+                    data: parameter,
+                    success: function (data) {
+                        alert(data.matchData)
+                        console.log(data.matchData)
+                        console.log('don', data.matchData)
+                    },
+                    error: function (error) {
+                        jsonValue = jQuery.parseJSON(error.responseText);
+                        aler("errorrrrr" + error.responseText);
+                    }
+
+                });
+                window.location.href="/VisitorDetail";
+                return
+
+    }
+
+    function take_snapshot() {
+		Webcam.freeze();
+		document.getElementById('take_snap').style.display = 'none';
+		document.getElementById('reset_cam').style.display = '';
+        document.getElementById('save_cam').style.display = '';
+	}
+
+	function reset_cam(){
+		Webcam.unfreeze();
+		document.getElementById('take_snap').style.display = '';
+		document.getElementById('reset_cam').style.display = 'none';
+        document.getElementById('save_cam').style.display = 'none';
+	}
+</script>
+</html>
