@@ -1,1 +1,1 @@
-"#app" 
+Install Flask, Dlib, sqlite
