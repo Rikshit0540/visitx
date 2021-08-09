@@ -77,7 +77,7 @@ pyttsx==1.1
 pyttsx3==2.7
 pytz==2018.7
 PyWavelets==1.0.0
-pywin32==224
+pywin32==301
 PyYAML==3.13
 requests==2.20.1
 scikit-image==0.14.0
