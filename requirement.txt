@@ -49,7 +49,7 @@ kivy.deps.glew==0.1.10
 kivy.deps.gstreamer==0.1.13
 kivy.deps.sdl2==0.1.18
 kiwisolver==1.0.1
-Mako==1.0.7
+Mako==1.2.2
 Markdown==2.6.11
 MarkupSafe==1.0
 matplotlib==3.0.0
